@@ -419,7 +419,7 @@ namespace DB_GUI
             this.Introduction.AutoSize = true;
             this.Introduction.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Introduction.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.Introduction.Location = new System.Drawing.Point(39, 12);
+            this.Introduction.Location = new System.Drawing.Point(37, 12);
             this.Introduction.Name = "Introduction";
             this.Introduction.Size = new System.Drawing.Size(142, 21);
             this.Introduction.TabIndex = 4;
@@ -634,6 +634,7 @@ namespace DB_GUI
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "GUI_Main";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Database Query Application";
             this.Load += new System.EventHandler(this.GUI_Main_Load);
             this.Datagrid.ResumeLayout(false);

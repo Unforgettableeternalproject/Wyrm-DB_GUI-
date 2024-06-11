@@ -99,6 +99,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Manual.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Manual.Designer.cs">
+      <DependentUpon>Manual.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI_Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +113,9 @@
     </Compile>
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Manual.resx">
+      <DependentUpon>Manual.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI_Main.resx">
       <DependentUpon>GUI_Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -137,6 +146,7 @@
   <ItemGroup>
     <Content Include="Concept Arts\DB_Frontend_Concept.png" />
     <Content Include="Concept Arts\To Do.txt" />
+    <Content Include="Concept Arts\User Manual.png" />
     <None Include="Resources\Show.png" />
     <None Include="Resources\Hide.png" />
     <None Include="README.md" />

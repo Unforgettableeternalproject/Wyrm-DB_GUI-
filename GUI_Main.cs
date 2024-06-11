@@ -28,6 +28,7 @@ namespace DB_GUI
         private bool canRecognize = false;
         private StringBuilder currentQuery = new StringBuilder();
         private Queue<string> queryQueue = new Queue<string>();
+        private Stack<string> history = new Stack<string>();
 
         public GUI_Main()
         {
@@ -473,6 +474,7 @@ namespace DB_GUI
 
         private void Connection()
         {
+            HistoryControl.Enabled = true;
             Disconnect.Enabled = true;
             Connect.Enabled = false;
             IPTbox.Enabled = false;
@@ -488,12 +490,14 @@ namespace DB_GUI
             Status.Text = "連線狀態: 已連線";
             Status.ForeColor = Color.YellowGreen;
             UpdateDatagrid("SHOW TABLES;");
+            Undo.Enabled = false;
         }
 
         private void Reset_All()
         {
-            currentQuery = new StringBuilder();
-            queryQueue = new Queue<string>();
+            history.Clear();
+            currentQuery.Clear();
+            queryQueue.Clear();
             connection = null;
             isConnected = false;
             canRecognize = false;
@@ -509,6 +513,7 @@ namespace DB_GUI
             UserTbox.Clear();
             PassTbox.Clear();
             CommandEntry.Clear();
+            HistoryControl.Enabled = false;
             Disconnect.Enabled = false;
             Clear.Enabled = false;
             ExampleRegion.Enabled = false;
@@ -530,6 +535,12 @@ namespace DB_GUI
             {
                 e.Cancel = true;
             }
+        }
+
+        private bool IsAllowedQuery(string query)
+        {
+            string trimmedQuery = query.Trim().ToUpper();
+            return trimmedQuery.StartsWith("SELECT") || trimmedQuery.StartsWith("SHOW");
         }
         #endregion
 
@@ -561,6 +572,12 @@ namespace DB_GUI
         {
             try
             {
+                // 檢查是否為 SELECT 查詢
+                if (!IsAllowedQuery(query))
+                {
+                    throw new InvalidOperationException("僅允許查詢操作 (SELECT)");
+                }
+
                 if (connection.State != ConnectionState.Open) connection.Open();
 
                 MySqlCommand cmd = new MySqlCommand(query, connection);
@@ -570,6 +587,13 @@ namespace DB_GUI
 
                 MainGrid.DataSource = dt;
                 MainGrid.AutoResizeColumns();
+                history.Push(query);
+                Undo.Enabled = true;
+            }
+            catch (InvalidOperationException ex)
+            {
+                UpdateLog($"試圖執行非查詢操作時遇見以下錯誤: {ex.Message}");
+                MessageBox.Show($"試圖執行非查詢操作時遇見以下錯誤: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (MySqlException ex)
             {
@@ -609,7 +633,7 @@ namespace DB_GUI
                 DBTbox.Text = "411177034";
                 UserTbox.Text = "411177034";
                 PassTbox.Text = "411177034";
-                Connect.PerformClick();
+                  Connect.PerformClick();
             }
         }
         private void SystemReset_Click(object sender, EventArgs e)
@@ -636,7 +660,7 @@ namespace DB_GUI
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = "CSV Files|*.csv";
-                saveFileDialog.Title = "Save a CSV File";
+                saveFileDialog.Title = "匯出為CSV檔案";
                 saveFileDialog.ShowDialog();
 
                 if (!string.IsNullOrEmpty(saveFileDialog.FileName))
@@ -648,17 +672,36 @@ namespace DB_GUI
 
         private void UserManual_Click(object sender, EventArgs e)
         {
-
+            Manual manual = new Manual();
+            manual.Show();
         }
 
         private void ShowTable_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = MessageBox.Show("將會進行SHOW TABLES;查詢並清空目前佇列中的查詢，確定嗎?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if(result == DialogResult.Yes)
+            {
+                currentQuery.Clear();
+                queryQueue.Enqueue("SHOW TABLES;");
+                history.Clear();
+                history.Push("SHOW TABLES;");
+                Submit.PerformClick();
+                Undo.Enabled = false;
+            }
         }
 
         private void Undo_Click(object sender, EventArgs e)
         {
+            DialogResult result = MessageBox.Show("將回到上一筆查詢，確定嗎?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (result == DialogResult.Yes)
+            {
+                history.Pop();
+                currentQuery.Clear();
+                queryQueue.Enqueue(history.Pop());
+                Submit.PerformClick();
 
+                if (history.Count == 1) Undo.Enabled = false;
+            }
         }
         #endregion
     }
