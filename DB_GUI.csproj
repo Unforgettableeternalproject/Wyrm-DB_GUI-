@@ -102,24 +102,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manual.cs">
+    <Compile Include="Forms\Manual.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Manual.Designer.cs">
+    <Compile Include="Forms\Manual.Designer.cs">
       <DependentUpon>Manual.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI_Main.cs">
+    <Compile Include="Forms\GUI_Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI_Main.Designer.cs">
+    <Compile Include="Forms\GUI_Main.Designer.cs">
       <DependentUpon>GUI_Main.cs</DependentUpon>
     </Compile>
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Manual.resx">
+    <EmbeddedResource Include="Forms\Manual.resx">
       <DependentUpon>Manual.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI_Main.resx">
+    <EmbeddedResource Include="Forms\GUI_Main.resx">
       <DependentUpon>GUI_Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
