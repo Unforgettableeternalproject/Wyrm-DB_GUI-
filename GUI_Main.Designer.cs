@@ -149,6 +149,7 @@ namespace DB_GUI
             this.ExConfirm.TabIndex = 12;
             this.ExConfirm.Text = "確認查詢";
             this.ExConfirm.UseVisualStyleBackColor = true;
+            this.ExConfirm.Click += new System.EventHandler(this.ExConfirm_Click);
             // 
             // ExampleCbox
             // 
@@ -337,6 +338,7 @@ namespace DB_GUI
             this.Append.TabIndex = 3;
             this.Append.Text = "加入程式列";
             this.Append.UseVisualStyleBackColor = true;
+            this.Append.Click += new System.EventHandler(this.Append_Click);
             // 
             // Clear
             // 
@@ -347,6 +349,7 @@ namespace DB_GUI
             this.Clear.TabIndex = 2;
             this.Clear.Text = "清除程式列";
             this.Clear.UseVisualStyleBackColor = true;
+            this.Clear.Click += new System.EventHandler(this.Clear_Click);
             // 
             // Submit
             // 
@@ -355,8 +358,9 @@ namespace DB_GUI
             this.Submit.Name = "Submit";
             this.Submit.Size = new System.Drawing.Size(80, 33);
             this.Submit.TabIndex = 1;
-            this.Submit.Text = "加入並發送";
+            this.Submit.Text = "送出查詢";
             this.Submit.UseVisualStyleBackColor = true;
+            this.Submit.Click += new System.EventHandler(this.Submit_Click);
             // 
             // CommandEntry
             // 

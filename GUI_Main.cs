@@ -1,14 +1,20 @@
 ﻿using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
+using Org.BouncyCastle.Asn1.X509;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace DB_GUI
@@ -19,6 +25,8 @@ namespace DB_GUI
         private MySqlCommand command;
         private bool isConnected = false;
         private bool canRecognize = false;
+        private StringBuilder currentQuery = new StringBuilder();
+        private Queue<string> queryQueue = new Queue<string>();
 
         public GUI_Main()
         {
@@ -37,6 +45,8 @@ namespace DB_GUI
 
         private void Reset_All()
         {
+            connection = null;
+            command = null;
             isConnected = false;
             canRecognize = false;
             IPTbox.Enabled = true;
@@ -136,8 +146,175 @@ namespace DB_GUI
                 UpdateLog($"試圖導覽至網頁時發生以下錯誤: {ex.Message}");
                 MessageBox.Show($"試圖導覽至網頁時發生以下錯誤: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
 
+        private void Append_Click(object sender, EventArgs e)
+        {
+            string input = CommandEntry.Text.Trim();
+            if (!string.IsNullOrEmpty(input))
+            {
+                currentQuery.AppendLine(input); // 使用 AppendLine 確保每行輸入都在新行
+                CommandEntry.Clear();
 
+                if (input.EndsWith(";"))
+                {
+                    queryQueue.Enqueue(currentQuery.ToString());
+                    currentQuery.Clear();
+                    MessageBox.Show("查詢已加入佇列。");
+                }
+
+                Clear.Enabled = true;
+            }
+            UpdateLog("", "QueryLog");
+        }
+
+        private void Submit_Click(object sender, EventArgs e)
+        {
+            string input = CommandEntry.Text.Trim();
+            if (!string.IsNullOrEmpty(input))
+            {
+                currentQuery.AppendLine(input);
+                CommandEntry.Clear();
+                Console.WriteLine(currentQuery);
+                if (currentQuery.Length > 0 && !currentQuery.ToString().Trim().EndsWith(";"))
+                {
+                    UpdateLog("查詢尚未完成。請使用分號結束查詢。");
+                    MessageBox.Show("查詢尚未完成。請使用分號結束查詢。");
+                    return;
+                }
+
+                if (queryQueue.Count > 0)
+                {
+                    string queryToExecute = queryQueue.Dequeue();
+                    ExecuteQuery(queryToExecute);
+                }
+                else
+                {
+                    ExecuteQuery(currentQuery.ToString().Trim());
+                    currentQuery.Clear();
+                }
+
+                UpdateLog("", "QueryLog");
+                if (!string.IsNullOrEmpty(currentQuery.ToString()) || queryQueue.Count > 0) Clear.Enabled = true;
+            }
+            else if (queryQueue.Count > 0)
+            {
+                string queryToExecute = queryQueue.Dequeue();
+                ExecuteQuery(queryToExecute);
+                if (queryQueue.Count > 0) Clear.Enabled = true;
+                UpdateLog("", "QueryLog");
+            }
+            else
+            {
+                UpdateLog("查詢尚未完成。請使用分號結束查詢。");
+                MessageBox.Show("查詢尚未完成。請使用分號結束查詢。");
+                return;
+            }
+        }
+
+        private void Clear_Click(object sender, EventArgs e)
+        {
+            if (currentQuery.Length > 0)
+            {
+                var result = MessageBox.Show("尚有未完成的查詢。確定要清除嗎？", "確認", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    currentQuery.Clear();
+                    UpdateLog("已清除查詢。");
+                    MessageBox.Show("未完成的查詢已清除。");
+                }
+            }
+            else if (queryQueue.Count > 0)
+            {
+                var result = MessageBox.Show("佇列中有已完成的查詢。確定要清除嗎？", "確認", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    queryQueue.Clear();
+                    UpdateLog("已清除佇列中的查詢。");
+                    MessageBox.Show("所有佇列中的查詢已清除。");
+                }
+            }
+            Clear.Enabled = false;
+            UpdateLog("", "QueryLog");
+        }
+
+        private void ExConfirm_Click(object sender, EventArgs e)
+        {
+            int exampleID = ExampleCbox.SelectedIndex;
+            switch (exampleID) 
+            {
+                case 0:
+                    queryQueue.Enqueue(
+                        "SELECT VIN, c.customerName\n" +
+                        "FROM `customer's car`\n" +
+                        "NATURAL JOIN vehicles as v\n" +
+                        "NATURAL JOIN customers as c\n" +
+                        "WHERE modelName IN(\n" +
+                        "SELECT s.modelName\n" +
+                        "FROM suppliers as s\n" +
+                        "WHERE manufacturingDate BETWEEN '2014-01-01' AND '2017-12-31'\n" +
+                        "AND manufacturingPart = 'transmission'\n" +
+                        "AND supplierName = 'Getrag'\n" +
+                        ")");
+                    UpdateLog("執行範例查詢一：持有來自Getrag供應商製造的缺陷零件組成的車的顧客。");
+                    Submit.PerformClick();
+                    break;
+                case 1:
+                    queryQueue.Enqueue(
+                        "SELECT dealerName\n" +
+                        "FROM(\n" +
+                        "SELECT dealerID, dealerName, SUM(saleFigure) AS sumSale\n" +
+                        "FROM salerecord AS s\n" +
+                        "NATURAL JOIN dealers\n" +
+                        "WHERE DATEDIFF(CURRENT_DATE, saleDate) < 365\n" +
+                        "GROUP BY dealerID, dealerName\n" +
+                        ") AS dIdNs\n" +
+                        "ORDER BY sumSale DESC\n" +
+                        "LIMIT 1; ");
+                    UpdateLog("執行範例查詢二：過去一年裡擁有最高銷售額的經銷商。");
+                    Submit.PerformClick();
+                    break;
+                case 2:
+                    queryQueue.Enqueue(
+                        "SELECT brandName\n" +
+                        "FROM salerecord\n" +
+                        "NATURAL JOIN vehicles\n" +
+                        "NATURAL JOIN models\n" +
+                        "NATURAL JOIN brands\n" +
+                        "WHERE DATEDIFF(CURRENT_DATE, saleDate) < 365\n" +
+                        "GROUP BY brandName\n" +
+                        "ORDER BY COUNT(*) DESC\n" +
+                        "LIMIT 2; ");
+                    UpdateLog("執行範例查詢三：過去一年裡具有最高銷售額的前兩個品牌。");
+                    Submit.PerformClick();
+                    break;
+                case 3:
+                    queryQueue.Enqueue(
+                        "SELECT MONTH(saleDate) as saleMonth\n" +
+                        "FROM salerecord\n" +
+                        "NATURAL JOIN vehicles\n" +
+                        "WHERE bodyStyle LIKE '%SUV%'\n" +
+                        "GROUP BY saleMonth\n" +
+                        "ORDER BY COUNT(*) DESC\n" +
+                        " LIMIT 1; "
+                        );
+                    UpdateLog("執行範例查詢四：銷售最多SUV的月份。");
+                    Submit.PerformClick();
+                    break;
+                case 4:
+                    queryQueue.Enqueue(
+                        "SELECT dealerName\n" +
+                        "FROM inventory\n" +
+                        "NATURAL JOIN dealers\n" +
+                        "GROUP BY dealerName\n" +
+                        "ORDER BY AVG(DATEDIFF(CURRENT_DATE, inventoryTime)) DESC\n" +
+                        "LIMIT 1; "
+                        );
+                    UpdateLog("執行範例查詢五：持有最久庫存的經銷商。");
+                    Submit.PerformClick();
+                    break;
+            }
+            ExampleCbox.SelectedIndex = 0;
         }
 
         private void ResponseConsole_Enter(object sender, EventArgs e)
@@ -190,6 +367,14 @@ namespace DB_GUI
             }
         }
 
+        private void ExecuteQuery(string query)
+        {
+            UpdateLog($"已送出查詢:\n{query}\n-----------------分隔線-----------------");
+            MessageBox.Show("查詢已送出。");
+            // 此處為與資料庫連線並執行查詢的程式碼
+            UpdateDatagrid(query); // 假設 UpdateGrid 是用來更新 DataGridView 的方法
+        }
+
         private void DoNothing()
         {
             ;
@@ -217,6 +402,9 @@ namespace DB_GUI
                     ResponseConsole.AppendText(timestamp + "系統訊息: " + message + Environment.NewLine);
                     break;
                 case "QueryLog":
+                    string queryMsg = $"目前佇列中有{queryQueue.Count}筆查詢。";
+                    string curQuery = currentQuery.Length != 0 ? $"\n尚未完成的查詢語句如下:\n{currentQuery.ToString().Trim()}" : "";
+                    ResponseConsole.AppendText(timestamp + queryMsg + curQuery + "\n-----------------分隔線-----------------" + Environment.NewLine);
                     break;
                 default:
                     ResponseConsole.AppendText(timestamp + "未知訊息: " + message + Environment.NewLine);
@@ -224,7 +412,7 @@ namespace DB_GUI
             }
 
             ResponseConsole.ReadOnly = true;
-            if(!isConnected) ResponseConsole.ScrollToCaret();
+            ResponseConsole.ScrollToCaret();
         }
 
         private void Connection()
@@ -243,7 +431,7 @@ namespace DB_GUI
 
             Status.Text = "連線狀態: 已連線";
             Status.ForeColor = Color.YellowGreen;
-            InitializeDatagrid();
+            UpdateDatagrid("SHOW TABLES;");
         }
 
         #endregion
@@ -271,11 +459,12 @@ namespace DB_GUI
             }
         }
 
-        private void InitializeDatagrid()
+        private void UpdateDatagrid(string query)
         {
             try
             {
-                string query = "SHOW TABLES;";
+                if (connection.State != ConnectionState.Open) connection.Open();
+
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -286,17 +475,12 @@ namespace DB_GUI
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show($"試圖初始化資料表時遇見以下錯誤: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"試圖獲得資料表時遇見以下錯誤: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 connection.Close();
             }
-        }
-
-        private void UpdateDatagrid(string query)
-        {
-
         }
 
         private void RetrieveInformation()
