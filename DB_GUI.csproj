@@ -137,6 +137,7 @@
   <ItemGroup>
     <Content Include="Concept Arts\DB_Frontend_Concept.png" />
     <Content Include="Concept Arts\To Do.txt" />
+    <None Include="README.md" />
     <None Include="Resources\Logo.png" />
     <None Include="Resources\Avatar_Be.png" />
     <None Include="Resources\Avatar_wu.png" />
