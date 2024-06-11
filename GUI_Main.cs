@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using DB_GUI.Properties;
+using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
 using Org.BouncyCastle.Asn1.X509;
 using System;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
@@ -22,7 +24,6 @@ namespace DB_GUI
     public partial class GUI_Main : Form
     {
         private MySqlConnection connection;
-        private MySqlCommand command;
         private bool isConnected = false;
         private bool canRecognize = false;
         private StringBuilder currentQuery = new StringBuilder();
@@ -33,6 +34,8 @@ namespace DB_GUI
             InitializeComponent();
             #region Extra Events
             ResponseConsole.Enter += ResponseConsole_Enter;
+            FormClosing += ClosingConfirmation;
+            CommandEntry.KeyDown += CommandEntry_KeyDown;
             #endregion
         }
 
@@ -41,38 +44,6 @@ namespace DB_GUI
             Reset_All();
             ResponseConsole.Clear();
             UpdateLog("查詢程式啟動...");
-        }
-
-        private void Reset_All()
-        {
-            connection = null;
-            command = null;
-            isConnected = false;
-            canRecognize = false;
-            IPTbox.Enabled = true;
-            PortTbox.Enabled = true;
-            DBTbox.Enabled = true;
-            UserTbox.Enabled = true;
-            PassDisplay.Enabled = true;
-            Connect.Enabled = true;
-            IPTbox.Clear();
-            PortTbox.Clear();
-            DBTbox.Clear();
-            UserTbox.Clear();
-            PassTbox.Clear();
-            CommandEntry.Clear();
-            Disconnect.Enabled = false;
-            Clear.Enabled = false;
-            ExampleRegion.Enabled = false;
-            Terminal.Enabled = false;
-            NotConnected.Visible = true;
-            MainGrid.DataSource = null;
-            MainGrid.Rows.Clear();
-            MainGrid.Columns.Clear();
-            MainGrid.Refresh();
-            ExampleCbox.SelectedIndex = 0;
-            Status.Text = "連線狀態: 未連線";
-            Status.ForeColor = Color.Maroon;
         }
 
         #region Components
@@ -98,10 +69,15 @@ namespace DB_GUI
 
         private void Disconnect_Click(object sender, EventArgs e)
         {
-            if(connection.State == ConnectionState.Open) connection.Close();
-            Reset_All();
-            UpdateLog("已斷開與資料庫的連線!");
-            //May have problems, may not.
+            DialogResult result = MessageBox.Show("確定要中斷與資料庫的連線嗎?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (result == DialogResult.Yes)
+            {
+                if (connection.State == ConnectionState.Open) connection.Close();
+                Reset_All();
+                UpdateLog("已斷開與資料庫的連線!");
+                MessageBox.Show("連線已中斷!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else DoNothing();
         }
 
         private void Charlie_Click(object sender, EventArgs e)
@@ -222,6 +198,7 @@ namespace DB_GUI
                     currentQuery.Clear();
                     UpdateLog("已清除查詢。");
                     MessageBox.Show("未完成的查詢已清除。");
+                    Clear.Enabled = false;
                 }
             }
             else if (queryQueue.Count > 0)
@@ -232,9 +209,9 @@ namespace DB_GUI
                     queryQueue.Clear();
                     UpdateLog("已清除佇列中的查詢。");
                     MessageBox.Show("所有佇列中的查詢已清除。");
+                    Clear.Enabled = false;
                 }
             }
-            Clear.Enabled = false;
             UpdateLog("", "QueryLog");
         }
 
@@ -317,11 +294,46 @@ namespace DB_GUI
             ExampleCbox.SelectedIndex = 0;
         }
 
+        private void Toggle_Click(object sender, EventArgs e)
+        {
+            bool isHidden = PassTbox.PasswordChar != '\0';
+            if (isHidden)
+            {
+                PassTbox.PasswordChar = '\0';
+                Toggle.BackgroundImage = Resources.Show;
+            }
+            else
+            {
+                PassTbox.PasswordChar = '*';
+                Toggle.BackgroundImage = Resources.Hide;
+            }
+        }
+
         private void ResponseConsole_Enter(object sender, EventArgs e)
         {
             this.ActiveControl = null;
         }
+
+        private void CommandEntry_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && e.Shift)
+            {
+                Append.PerformClick();
+                e.SuppressKeyPress = true; // 防止輸入換行
+            }
+            else if (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Alt)
+            {
+                Clear.PerformClick();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                Submit.PerformClick();
+                e.SuppressKeyPress = true;
+            }
+        }
         #endregion
+
         #region Helper Functions
         private bool IsValidServerIP(string serverIP)
         {
@@ -338,7 +350,7 @@ namespace DB_GUI
                 try
                 {
                     tempConnection.Open();
-                    UpdateLog("成功連線到資料庫: " + database.ToString());
+                    UpdateLog("成功連線到資料庫: " + database.ToString() + "!");
                     MessageBox.Show("成功連線到資料庫!", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     InitializeDatabaseConnection(connectionString);
                 }
@@ -415,6 +427,50 @@ namespace DB_GUI
             ResponseConsole.ScrollToCaret();
         }
 
+        private void ExportToCsv(string filePath)
+        {
+            StringBuilder csvContent = new StringBuilder();
+
+            try
+            {
+                // Add the headers
+                for (int col = 0; col < MainGrid.Columns.Count; col++)
+                {
+                    csvContent.Append(MainGrid.Columns[col].HeaderText);
+                    if (col < MainGrid.Columns.Count - 1)
+                    {
+                        csvContent.Append(",");
+                    }
+                }
+                csvContent.AppendLine();
+
+                // Add the rows
+                for (int row = 0; row < MainGrid.Rows.Count; row++)
+                {
+                    for (int col = 0; col < MainGrid.Columns.Count; col++)
+                    {
+                        csvContent.Append(MainGrid.Rows[row].Cells[col].Value?.ToString());
+                        if (col < MainGrid.Columns.Count - 1)
+                        {
+                            csvContent.Append(",");
+                        }
+                    }
+                    csvContent.AppendLine();
+                }
+
+                // Write to file
+                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
+                UpdateLog("匯出程序 - 檔案匯出成功!");
+                MessageBox.Show("檔案匯出成功!", "匯出程序", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception e)
+            {
+                UpdateLog("匯出程序 - 檔案匯出失敗!");
+                MessageBox.Show($"檔案匯出失敗，錯誤訊息:{e}", "匯出程序", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        }
+
         private void Connection()
         {
             Disconnect.Enabled = true;
@@ -434,7 +490,49 @@ namespace DB_GUI
             UpdateDatagrid("SHOW TABLES;");
         }
 
+        private void Reset_All()
+        {
+            currentQuery = new StringBuilder();
+            queryQueue = new Queue<string>();
+            connection = null;
+            isConnected = false;
+            canRecognize = false;
+            IPTbox.Enabled = true;
+            PortTbox.Enabled = true;
+            DBTbox.Enabled = true;
+            UserTbox.Enabled = true;
+            PassTbox.Enabled = true;
+            Connect.Enabled = true;
+            IPTbox.Clear();
+            PortTbox.Clear();
+            DBTbox.Clear();
+            UserTbox.Clear();
+            PassTbox.Clear();
+            CommandEntry.Clear();
+            Disconnect.Enabled = false;
+            Clear.Enabled = false;
+            ExampleRegion.Enabled = false;
+            Terminal.Enabled = false;
+            NotConnected.Visible = true;
+            MainGrid.DataSource = null;
+            MainGrid.Rows.Clear();
+            MainGrid.Columns.Clear();
+            MainGrid.Refresh();
+            ExampleCbox.SelectedIndex = 0;
+            Status.Text = "連線狀態: 未連線";
+            Status.ForeColor = Color.Maroon;
+        }
+
+        private void ClosingConfirmation(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("你確定要離開應用程式嗎？", "確認關閉", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
         #endregion
+
         #region Database Handling
         private void InitializeDatabaseConnection(string _connectionString)
         {
@@ -475,67 +573,34 @@ namespace DB_GUI
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show($"試圖獲得資料表時遇見以下錯誤: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string message = "SQL錯誤：";
+                switch (ex.Number)
+                {
+                    case 1064: // SQL語法錯誤
+                        message += "語法錯誤";
+                        break;
+                    case 1049: // 未知資料庫
+                        message += "資料庫不存在";
+                        break;
+                    case 1045: // 存取被拒
+                        message += "使用者或密碼錯誤";
+                        break;
+                    default:
+                        message += ex.Message;
+                        break;
+                }
+                UpdateLog($"試圖獲得資料表時遇見以下錯誤: {message}");
+                MessageBox.Show($"試圖獲得資料表時遇見以下錯誤: {message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 connection.Close();
             }
         }
-
-        private void RetrieveInformation()
-        {
-            string someName = "Georgi";
-            string query = "SELECT first_name, last_name FROM employees WHERE first_name = @firstName";
-
-            using (command = new MySqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@firstName", someName);
-
-                try
-                {
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string firstName = reader.GetString("first_name");
-                            string lastName = reader.GetString("last_name");
-                            MessageBox.Show($"First name: {firstName}, Last name: {lastName}");
-                        }
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show($"Error: {ex.Message}");
-                }
-            }
-        }
-
-        private void InsertInformation()
-        {
-            string query = "INSERT INTO employees (first_name, last_name) VALUES (@firstName, @lastName)";
-
-            using (command = new MySqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@firstName", "Maria");
-                command.Parameters.AddWithValue("@lastName", "DB");
-
-                try
-                {
-                    command.ExecuteNonQuery();
-                    MessageBox.Show($"Data inserted successfully!");
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show($"Error: {ex.Message}");
-                }
-            }
-        }
-
         #endregion
 
-        #region Debug Methods
-        private void Debug_Click(object sender, EventArgs e)
+        #region Extra Menu Methods
+        private void ExampleDatabase_Click(object sender, EventArgs e)
         {
             if (!isConnected)
             {
@@ -544,8 +609,44 @@ namespace DB_GUI
                 DBTbox.Text = "411177034";
                 UserTbox.Text = "411177034";
                 PassTbox.Text = "411177034";
+                Connect.PerformClick();
             }
         }
+        private void SystemReset_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("這麼做將會重置整個系統，包含正在進行的資料查詢，確認要繼續嗎?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes) 
+            {
+                Reset_All();
+                ResponseConsole.Clear();
+                UpdateLog("查詢程式啟動...");
+                MessageBox.Show("已重置系統!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void Export_Click(object sender, EventArgs e)
+        {
+            if (!isConnected)
+            {
+                UpdateLog("匯出程序 - 未連線至資料庫。");
+                MessageBox.Show("你尚未連接到資料庫!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "CSV Files|*.csv";
+                saveFileDialog.Title = "Save a CSV File";
+                saveFileDialog.ShowDialog();
+
+                if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+                {
+                    ExportToCsv(saveFileDialog.FileName);
+                }
+            }
+        }
+
+        
         #endregion
     }
 

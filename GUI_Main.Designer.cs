@@ -32,6 +32,7 @@ namespace DB_GUI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GUI_Main));
             this.Datagrid = new System.Windows.Forms.Panel();
             this.NotConnected = new System.Windows.Forms.Label();
             this.MainGrid = new System.Windows.Forms.DataGridView();
@@ -43,6 +44,7 @@ namespace DB_GUI
             this.Disconnect = new System.Windows.Forms.Button();
             this.Connect = new System.Windows.Forms.Button();
             this.PromptRegion = new System.Windows.Forms.Panel();
+            this.Toggle = new System.Windows.Forms.Button();
             this.PassTbox = new System.Windows.Forms.TextBox();
             this.UserTbox = new System.Windows.Forms.TextBox();
             this.DBTbox = new System.Windows.Forms.TextBox();
@@ -59,7 +61,6 @@ namespace DB_GUI
             this.Clear = new System.Windows.Forms.Button();
             this.Submit = new System.Windows.Forms.Button();
             this.CommandEntry = new System.Windows.Forms.TextBox();
-            this.MenuBar = new System.Windows.Forms.MenuStrip();
             this.Credits = new System.Windows.Forms.Panel();
             this.Introduction = new System.Windows.Forms.Label();
             this.BernieName = new System.Windows.Forms.Label();
@@ -67,11 +68,17 @@ namespace DB_GUI
             this.Bernie = new System.Windows.Forms.Button();
             this.Charlie = new System.Windows.Forms.Button();
             this.Title = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.TitleDisplay = new System.Windows.Forms.Label();
+            this.Logo = new System.Windows.Forms.Button();
             this.Status = new System.Windows.Forms.Label();
+            this.MenuBar = new System.Windows.Forms.MenuStrip();
+            this.DisplayMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.Functions = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExampleDatebase = new System.Windows.Forms.ToolStripMenuItem();
+            this.SystemReset = new System.Windows.Forms.ToolStripMenuItem();
+            this.Export = new System.Windows.Forms.ToolStripMenuItem();
+            this.UserManual = new System.Windows.Forms.ToolStripMenuItem();
             this.GeneralDescription = new System.Windows.Forms.ToolTip(this.components);
-            this.Debug = new System.Windows.Forms.Button();
             this.Datagrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainGrid)).BeginInit();
             this.Options.SuspendLayout();
@@ -80,6 +87,7 @@ namespace DB_GUI
             this.Terminal.SuspendLayout();
             this.Credits.SuspendLayout();
             this.Title.SuspendLayout();
+            this.MenuBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // Datagrid
@@ -146,7 +154,7 @@ namespace DB_GUI
             this.ExConfirm.Location = new System.Drawing.Point(61, 43);
             this.ExConfirm.Name = "ExConfirm";
             this.ExConfirm.Size = new System.Drawing.Size(82, 32);
-            this.ExConfirm.TabIndex = 12;
+            this.ExConfirm.TabIndex = 5;
             this.ExConfirm.Text = "確認查詢";
             this.ExConfirm.UseVisualStyleBackColor = true;
             this.ExConfirm.Click += new System.EventHandler(this.ExConfirm_Click);
@@ -164,7 +172,7 @@ namespace DB_GUI
             this.ExampleCbox.Location = new System.Drawing.Point(92, 11);
             this.ExampleCbox.Name = "ExampleCbox";
             this.ExampleCbox.Size = new System.Drawing.Size(109, 24);
-            this.ExampleCbox.TabIndex = 11;
+            this.ExampleCbox.TabIndex = 4;
             // 
             // ExampleDisplay
             // 
@@ -182,7 +190,7 @@ namespace DB_GUI
             this.Disconnect.Location = new System.Drawing.Point(133, 189);
             this.Disconnect.Name = "Disconnect";
             this.Disconnect.Size = new System.Drawing.Size(69, 32);
-            this.Disconnect.TabIndex = 2;
+            this.Disconnect.TabIndex = 11;
             this.Disconnect.Text = "斷線";
             this.Disconnect.UseVisualStyleBackColor = true;
             this.Disconnect.Click += new System.EventHandler(this.Disconnect_Click);
@@ -193,7 +201,7 @@ namespace DB_GUI
             this.Connect.Location = new System.Drawing.Point(14, 189);
             this.Connect.Name = "Connect";
             this.Connect.Size = new System.Drawing.Size(69, 32);
-            this.Connect.TabIndex = 1;
+            this.Connect.TabIndex = 10;
             this.Connect.Text = "連線";
             this.Connect.UseVisualStyleBackColor = true;
             this.Connect.Click += new System.EventHandler(this.Connect_Click);
@@ -201,6 +209,7 @@ namespace DB_GUI
             // PromptRegion
             // 
             this.PromptRegion.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.PromptRegion.Controls.Add(this.Toggle);
             this.PromptRegion.Controls.Add(this.PassTbox);
             this.PromptRegion.Controls.Add(this.UserTbox);
             this.PromptRegion.Controls.Add(this.DBTbox);
@@ -215,6 +224,19 @@ namespace DB_GUI
             this.PromptRegion.Name = "PromptRegion";
             this.PromptRegion.Size = new System.Drawing.Size(206, 225);
             this.PromptRegion.TabIndex = 0;
+            // 
+            // Toggle
+            // 
+            this.Toggle.BackgroundImage = global::DB_GUI.Properties.Resources.Hide;
+            this.Toggle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Toggle.FlatAppearance.BorderSize = 0;
+            this.Toggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Toggle.Location = new System.Drawing.Point(184, 138);
+            this.Toggle.Name = "Toggle";
+            this.Toggle.Size = new System.Drawing.Size(18, 20);
+            this.Toggle.TabIndex = 10;
+            this.Toggle.UseVisualStyleBackColor = true;
+            this.Toggle.Click += new System.EventHandler(this.Toggle_Click);
             // 
             // PassTbox
             // 
@@ -310,7 +332,6 @@ namespace DB_GUI
             this.Terminal.Controls.Add(this.Clear);
             this.Terminal.Controls.Add(this.Submit);
             this.Terminal.Controls.Add(this.CommandEntry);
-            this.Terminal.Controls.Add(this.MenuBar);
             this.Terminal.Location = new System.Drawing.Point(3, 421);
             this.Terminal.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Terminal.Name = "Terminal";
@@ -335,7 +356,7 @@ namespace DB_GUI
             this.Append.Location = new System.Drawing.Point(366, 4);
             this.Append.Name = "Append";
             this.Append.Size = new System.Drawing.Size(80, 33);
-            this.Append.TabIndex = 3;
+            this.Append.TabIndex = 1;
             this.Append.Text = "加入程式列";
             this.Append.UseVisualStyleBackColor = true;
             this.Append.Click += new System.EventHandler(this.Append_Click);
@@ -346,7 +367,7 @@ namespace DB_GUI
             this.Clear.Location = new System.Drawing.Point(538, 4);
             this.Clear.Name = "Clear";
             this.Clear.Size = new System.Drawing.Size(80, 33);
-            this.Clear.TabIndex = 2;
+            this.Clear.TabIndex = 3;
             this.Clear.Text = "清除程式列";
             this.Clear.UseVisualStyleBackColor = true;
             this.Clear.Click += new System.EventHandler(this.Clear_Click);
@@ -357,7 +378,7 @@ namespace DB_GUI
             this.Submit.Location = new System.Drawing.Point(452, 4);
             this.Submit.Name = "Submit";
             this.Submit.Size = new System.Drawing.Size(80, 33);
-            this.Submit.TabIndex = 1;
+            this.Submit.TabIndex = 2;
             this.Submit.Text = "送出查詢";
             this.Submit.UseVisualStyleBackColor = true;
             this.Submit.Click += new System.EventHandler(this.Submit_Click);
@@ -369,14 +390,6 @@ namespace DB_GUI
             this.CommandEntry.Name = "CommandEntry";
             this.CommandEntry.Size = new System.Drawing.Size(354, 35);
             this.CommandEntry.TabIndex = 0;
-            // 
-            // MenuBar
-            // 
-            this.MenuBar.Location = new System.Drawing.Point(0, 0);
-            this.MenuBar.Name = "MenuBar";
-            this.MenuBar.Size = new System.Drawing.Size(623, 24);
-            this.MenuBar.TabIndex = 5;
-            this.MenuBar.Text = "menuStrip1";
             // 
             // Credits
             // 
@@ -435,7 +448,7 @@ namespace DB_GUI
             this.Bernie.Location = new System.Drawing.Point(127, 36);
             this.Bernie.Name = "Bernie";
             this.Bernie.Size = new System.Drawing.Size(75, 75);
-            this.Bernie.TabIndex = 1;
+            this.Bernie.TabIndex = 31;
             this.Bernie.UseVisualStyleBackColor = false;
             this.Bernie.Click += new System.EventHandler(this.Bernie_Click);
             // 
@@ -449,7 +462,7 @@ namespace DB_GUI
             this.Charlie.Location = new System.Drawing.Point(14, 36);
             this.Charlie.Name = "Charlie";
             this.Charlie.Size = new System.Drawing.Size(75, 75);
-            this.Charlie.TabIndex = 0;
+            this.Charlie.TabIndex = 30;
             this.Charlie.UseVisualStyleBackColor = false;
             this.Charlie.Click += new System.EventHandler(this.Charlie_Click);
             // 
@@ -458,39 +471,39 @@ namespace DB_GUI
             this.Title.AutoSize = true;
             this.Title.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Title.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Title.Controls.Add(this.Debug);
-            this.Title.Controls.Add(this.label1);
-            this.Title.Controls.Add(this.button1);
+            this.Title.Controls.Add(this.TitleDisplay);
+            this.Title.Controls.Add(this.Logo);
             this.Title.Controls.Add(this.Status);
+            this.Title.Controls.Add(this.MenuBar);
             this.Title.Location = new System.Drawing.Point(-1, 0);
             this.Title.Name = "Title";
             this.Title.Size = new System.Drawing.Size(845, 87);
             this.Title.TabIndex = 4;
             // 
-            // label1
+            // TitleDisplay
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("UD Digi Kyokasho NP-B", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(80)))));
-            this.label1.Location = new System.Drawing.Point(285, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(375, 41);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Wyrm 資料庫檢索系統";
+            this.TitleDisplay.AutoSize = true;
+            this.TitleDisplay.Font = new System.Drawing.Font("UD Digi Kyokasho NP-B", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.TitleDisplay.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(80)))));
+            this.TitleDisplay.Location = new System.Drawing.Point(280, 37);
+            this.TitleDisplay.Name = "TitleDisplay";
+            this.TitleDisplay.Size = new System.Drawing.Size(375, 41);
+            this.TitleDisplay.TabIndex = 2;
+            this.TitleDisplay.Text = "Wyrm 資料庫檢索系統";
             // 
-            // button1
+            // Logo
             // 
-            this.button1.BackColor = System.Drawing.Color.Transparent;
-            this.button1.BackgroundImage = global::DB_GUI.Properties.Resources.Logo;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button1.Enabled = false;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(200, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(48, 67);
-            this.button1.TabIndex = 1;
-            this.button1.UseVisualStyleBackColor = false;
+            this.Logo.BackColor = System.Drawing.Color.Transparent;
+            this.Logo.BackgroundImage = global::DB_GUI.Properties.Resources.Logo;
+            this.Logo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Logo.Enabled = false;
+            this.Logo.FlatAppearance.BorderSize = 0;
+            this.Logo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Logo.Location = new System.Drawing.Point(210, 27);
+            this.Logo.Name = "Logo";
+            this.Logo.Size = new System.Drawing.Size(48, 56);
+            this.Logo.TabIndex = 1;
+            this.Logo.UseVisualStyleBackColor = false;
             // 
             // Status
             // 
@@ -503,16 +516,67 @@ namespace DB_GUI
             this.Status.TabIndex = 0;
             this.Status.Text = "連線狀態: 未連線";
             // 
-            // Debug
+            // MenuBar
             // 
-            this.Debug.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug.Location = new System.Drawing.Point(778, 8);
-            this.Debug.Name = "Debug";
-            this.Debug.Size = new System.Drawing.Size(62, 38);
-            this.Debug.TabIndex = 3;
-            this.Debug.Text = "測試";
-            this.Debug.UseVisualStyleBackColor = true;
-            this.Debug.Click += new System.EventHandler(this.Debug_Click);
+            this.MenuBar.BackColor = System.Drawing.Color.Silver;
+            this.MenuBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DisplayMenu,
+            this.Functions,
+            this.Export,
+            this.UserManual});
+            this.MenuBar.Location = new System.Drawing.Point(0, 0);
+            this.MenuBar.Name = "MenuBar";
+            this.MenuBar.Size = new System.Drawing.Size(845, 24);
+            this.MenuBar.TabIndex = 3;
+            this.MenuBar.Text = "menuStrip1";
+            // 
+            // DisplayMenu
+            // 
+            this.DisplayMenu.Enabled = false;
+            this.DisplayMenu.Name = "DisplayMenu";
+            this.DisplayMenu.Size = new System.Drawing.Size(55, 20);
+            this.DisplayMenu.Text = "其他：";
+            // 
+            // Functions
+            // 
+            this.Functions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ExampleDatebase,
+            this.SystemReset});
+            this.Functions.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Functions.Name = "Functions";
+            this.Functions.Size = new System.Drawing.Size(67, 20);
+            this.Functions.Text = "系統功能";
+            // 
+            // ExampleDatebase
+            // 
+            this.ExampleDatebase.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ExampleDatebase.ForeColor = System.Drawing.Color.Black;
+            this.ExampleDatebase.Name = "ExampleDatebase";
+            this.ExampleDatebase.Size = new System.Drawing.Size(180, 22);
+            this.ExampleDatebase.Text = "連接範例資料庫";
+            this.ExampleDatebase.Click += new System.EventHandler(this.ExampleDatabase_Click);
+            // 
+            // SystemReset
+            // 
+            this.SystemReset.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SystemReset.ForeColor = System.Drawing.Color.DarkRed;
+            this.SystemReset.Name = "SystemReset";
+            this.SystemReset.Size = new System.Drawing.Size(180, 22);
+            this.SystemReset.Text = "系統重置";
+            this.SystemReset.Click += new System.EventHandler(this.SystemReset_Click);
+            // 
+            // Export
+            // 
+            this.Export.Name = "Export";
+            this.Export.Size = new System.Drawing.Size(79, 20);
+            this.Export.Text = "匯出資料表";
+            this.Export.Click += new System.EventHandler(this.Export_Click);
+            // 
+            // UserManual
+            // 
+            this.UserManual.Name = "UserManual";
+            this.UserManual.Size = new System.Drawing.Size(67, 20);
+            this.UserManual.Text = "使用說明";
             // 
             // GUI_Main
             // 
@@ -527,10 +591,10 @@ namespace DB_GUI
             this.Controls.Add(this.Options);
             this.Controls.Add(this.Datagrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MainMenuStrip = this.MenuBar;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "GUI_Main";
-            this.Text = "Volkswagen Database Query Application";
+            this.Text = "Database Query Application";
             this.Load += new System.EventHandler(this.GUI_Main_Load);
             this.Datagrid.ResumeLayout(false);
             this.Datagrid.PerformLayout();
@@ -546,6 +610,8 @@ namespace DB_GUI
             this.Credits.PerformLayout();
             this.Title.ResumeLayout(false);
             this.Title.PerformLayout();
+            this.MenuBar.ResumeLayout(false);
+            this.MenuBar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -589,10 +655,16 @@ namespace DB_GUI
         private Label BernieName;
         private Label CharlieName;
         private ToolTip GeneralDescription;
+        private Button Logo;
+        private Label TitleDisplay;
         private MenuStrip MenuBar;
-        private Button button1;
-        private Label label1;
-        private Button Debug;
+        private ToolStripMenuItem Functions;
+        private ToolStripMenuItem ExampleDatebase;
+        private ToolStripMenuItem SystemReset;
+        private ToolStripMenuItem DisplayMenu;
+        private ToolStripMenuItem Export;
+        private ToolStripMenuItem UserManual;
+        private Button Toggle;
     }
 }
 
