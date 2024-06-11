@@ -646,7 +646,20 @@ namespace DB_GUI
             }
         }
 
-        
+        private void UserManual_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ShowTable_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Undo_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion
     }
 

@@ -79,6 +79,9 @@ namespace DB_GUI
             this.Export = new System.Windows.Forms.ToolStripMenuItem();
             this.UserManual = new System.Windows.Forms.ToolStripMenuItem();
             this.GeneralDescription = new System.Windows.Forms.ToolTip(this.components);
+            this.HistoryControl = new System.Windows.Forms.ToolStripMenuItem();
+            this.ShowTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.Undo = new System.Windows.Forms.ToolStripMenuItem();
             this.Datagrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainGrid)).BeginInit();
             this.Options.SuspendLayout();
@@ -156,6 +159,7 @@ namespace DB_GUI
             this.ExConfirm.Size = new System.Drawing.Size(82, 32);
             this.ExConfirm.TabIndex = 5;
             this.ExConfirm.Text = "確認查詢";
+            this.GeneralDescription.SetToolTip(this.ExConfirm, "送出範例查詢");
             this.ExConfirm.UseVisualStyleBackColor = true;
             this.ExConfirm.Click += new System.EventHandler(this.ExConfirm_Click);
             // 
@@ -192,6 +196,7 @@ namespace DB_GUI
             this.Disconnect.Size = new System.Drawing.Size(69, 32);
             this.Disconnect.TabIndex = 11;
             this.Disconnect.Text = "斷線";
+            this.GeneralDescription.SetToolTip(this.Disconnect, "取消連接資料庫");
             this.Disconnect.UseVisualStyleBackColor = true;
             this.Disconnect.Click += new System.EventHandler(this.Disconnect_Click);
             // 
@@ -203,6 +208,7 @@ namespace DB_GUI
             this.Connect.Size = new System.Drawing.Size(69, 32);
             this.Connect.TabIndex = 10;
             this.Connect.Text = "連線";
+            this.GeneralDescription.SetToolTip(this.Connect, "用提供的資料連接到資料庫");
             this.Connect.UseVisualStyleBackColor = true;
             this.Connect.Click += new System.EventHandler(this.Connect_Click);
             // 
@@ -358,6 +364,7 @@ namespace DB_GUI
             this.Append.Size = new System.Drawing.Size(80, 33);
             this.Append.TabIndex = 1;
             this.Append.Text = "加入程式列";
+            this.GeneralDescription.SetToolTip(this.Append, "將程式加入查詢緩衝");
             this.Append.UseVisualStyleBackColor = true;
             this.Append.Click += new System.EventHandler(this.Append_Click);
             // 
@@ -369,6 +376,7 @@ namespace DB_GUI
             this.Clear.Size = new System.Drawing.Size(80, 33);
             this.Clear.TabIndex = 3;
             this.Clear.Text = "清除程式列";
+            this.GeneralDescription.SetToolTip(this.Clear, "清除當前查詢或緩衝");
             this.Clear.UseVisualStyleBackColor = true;
             this.Clear.Click += new System.EventHandler(this.Clear_Click);
             // 
@@ -380,15 +388,16 @@ namespace DB_GUI
             this.Submit.Size = new System.Drawing.Size(80, 33);
             this.Submit.TabIndex = 2;
             this.Submit.Text = "送出查詢";
+            this.GeneralDescription.SetToolTip(this.Submit, "送出最舊的一筆查詢");
             this.Submit.UseVisualStyleBackColor = true;
             this.Submit.Click += new System.EventHandler(this.Submit_Click);
             // 
             // CommandEntry
             // 
-            this.CommandEntry.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.CommandEntry.Font = new System.Drawing.Font("Rockwell", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CommandEntry.Location = new System.Drawing.Point(6, 4);
             this.CommandEntry.Name = "CommandEntry";
-            this.CommandEntry.Size = new System.Drawing.Size(354, 35);
+            this.CommandEntry.Size = new System.Drawing.Size(354, 32);
             this.CommandEntry.TabIndex = 0;
             // 
             // Credits
@@ -522,6 +531,7 @@ namespace DB_GUI
             this.MenuBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DisplayMenu,
             this.Functions,
+            this.HistoryControl,
             this.Export,
             this.UserManual});
             this.MenuBar.Location = new System.Drawing.Point(0, 0);
@@ -546,6 +556,7 @@ namespace DB_GUI
             this.Functions.Name = "Functions";
             this.Functions.Size = new System.Drawing.Size(67, 20);
             this.Functions.Text = "系統功能";
+            this.Functions.ToolTipText = "展開系統功能";
             // 
             // ExampleDatebase
             // 
@@ -570,6 +581,7 @@ namespace DB_GUI
             this.Export.Name = "Export";
             this.Export.Size = new System.Drawing.Size(79, 20);
             this.Export.Text = "匯出資料表";
+            this.Export.ToolTipText = "匯出為csv檔案";
             this.Export.Click += new System.EventHandler(this.Export_Click);
             // 
             // UserManual
@@ -577,6 +589,34 @@ namespace DB_GUI
             this.UserManual.Name = "UserManual";
             this.UserManual.Size = new System.Drawing.Size(67, 20);
             this.UserManual.Text = "使用說明";
+            this.UserManual.ToolTipText = "開啟使用說明";
+            this.UserManual.Click += new System.EventHandler(this.UserManual_Click);
+            // 
+            // HistoryControl
+            // 
+            this.HistoryControl.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ShowTable,
+            this.Undo});
+            this.HistoryControl.Name = "HistoryControl";
+            this.HistoryControl.Size = new System.Drawing.Size(67, 20);
+            this.HistoryControl.Text = "流程控制";
+            this.HistoryControl.ToolTipText = "進行流程控制";
+            // 
+            // ShowTable
+            // 
+            this.ShowTable.Name = "ShowTable";
+            this.ShowTable.Size = new System.Drawing.Size(180, 22);
+            this.ShowTable.Text = "列出資料表";
+            this.ShowTable.ToolTipText = "回到最一開始的查詢";
+            this.ShowTable.Click += new System.EventHandler(this.ShowTable_Click);
+            // 
+            // Undo
+            // 
+            this.Undo.Name = "Undo";
+            this.Undo.Size = new System.Drawing.Size(180, 22);
+            this.Undo.Text = "回到上一筆查詢";
+            this.Undo.ToolTipText = "回到已確認的上一筆查詢";
+            this.Undo.Click += new System.EventHandler(this.Undo_Click);
             // 
             // GUI_Main
             // 
@@ -665,6 +705,9 @@ namespace DB_GUI
         private ToolStripMenuItem Export;
         private ToolStripMenuItem UserManual;
         private Button Toggle;
+        private ToolStripMenuItem HistoryControl;
+        private ToolStripMenuItem ShowTable;
+        private ToolStripMenuItem Undo;
     }
 }
 
