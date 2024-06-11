@@ -292,7 +292,6 @@ namespace DB_GUI
                     Submit.PerformClick();
                     break;
             }
-            ExampleCbox.SelectedIndex = 0;
         }
 
         private void Toggle_Click(object sender, EventArgs e)
