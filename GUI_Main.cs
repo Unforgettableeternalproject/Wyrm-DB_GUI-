@@ -19,15 +19,20 @@ namespace DB_GUI
         private MySqlCommand command;
         private bool isConnected = false;
         private bool canRecognize = false;
+
         public GUI_Main()
         {
             InitializeComponent();
+            #region Extra Events
+            ResponseConsole.Enter += ResponseConsole_Enter;
+            #endregion
         }
 
         private void GUI_Main_Load(object sender, EventArgs e)
         {
             Reset_All();
             ResponseConsole.Clear();
+            UpdateLog("查詢程式啟動...");
         }
 
         private void Reset_All()
@@ -39,19 +44,22 @@ namespace DB_GUI
             DBTbox.Enabled = true;
             UserTbox.Enabled = true;
             PassDisplay.Enabled = true;
+            Connect.Enabled = true;
             IPTbox.Clear();
             PortTbox.Clear();
             DBTbox.Clear();
             UserTbox.Clear();
             PassTbox.Clear();
             CommandEntry.Clear();
-            CommandEntry.Enabled = false;
             Disconnect.Enabled = false;
             Clear.Enabled = false;
             ExampleRegion.Enabled = false;
             Terminal.Enabled = false;
-            Submit.Enabled = false;
             NotConnected.Visible = true;
+            MainGrid.DataSource = null;
+            MainGrid.Rows.Clear();
+            MainGrid.Columns.Clear();
+            MainGrid.Refresh();
             ExampleCbox.SelectedIndex = 0;
             Status.Text = "連線狀態: 未連線";
             Status.ForeColor = Color.Maroon;
@@ -69,6 +77,7 @@ namespace DB_GUI
             // Step 1: Validate server IP format
             if (!IsValidServerIP(serverIP))
             {
+                UpdateLog("錯誤：無效的伺服器位址格式。");
                 MessageBox.Show("錯誤：無效的伺服器位址格式。", "資訊有誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -79,41 +88,61 @@ namespace DB_GUI
 
         private void Disconnect_Click(object sender, EventArgs e)
         {
-
+            if(connection.State == ConnectionState.Open) connection.Close();
+            Reset_All();
+            UpdateLog("已斷開與資料庫的連線!");
+            //May have problems, may not.
         }
 
         private void Charlie_Click(object sender, EventArgs e)
         {
-            string url = "https://github.com/calculusfkyou"; // 替换为你的GitHub URL
+            string url = "https://github.com/calculusfkyou";
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
+                DialogResult redirect = MessageBox.Show("將導引至外部網頁 (Github.com)，確認要繼續嗎?", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+                if (redirect == DialogResult.OK)
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
+                else DoNothing();
             }
             catch (Exception ex)
             {
+                UpdateLog($"試圖導覽至網頁時發生以下錯誤: {ex.Message}");
                 MessageBox.Show($"試圖導覽至網頁時發生以下錯誤: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void Bernie_Click(object sender, EventArgs e)
         {
-            string url = "https://github.com/Unforgettableeternalproject"; // 替换为你的GitHub URL
+            string url = "https://github.com/Unforgettableeternalproject";
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
+                DialogResult redirect = MessageBox.Show("將導引至外部網頁 (Github.com)，確認要繼續嗎?", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+                if (redirect == DialogResult.OK)
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
+                else DoNothing();
             }
             catch (Exception ex)
             {
+                UpdateLog($"試圖導覽至網頁時發生以下錯誤: {ex.Message}");
                 MessageBox.Show($"試圖導覽至網頁時發生以下錯誤: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+
+        }
+
+        private void ResponseConsole_Enter(object sender, EventArgs e)
+        {
+            this.ActiveControl = null;
         }
         #endregion
         #region Helper Functions
@@ -132,6 +161,7 @@ namespace DB_GUI
                 try
                 {
                     tempConnection.Open();
+                    UpdateLog("成功連線到資料庫: " + database.ToString());
                     MessageBox.Show("成功連線到資料庫!", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     InitializeDatabaseConnection(connectionString);
                 }
@@ -140,15 +170,19 @@ namespace DB_GUI
                     switch (ex.Number)
                     {
                         case 1042: // Unable to connect to any of the specified MySQL hosts
+                            UpdateLog("錯誤：無法連接到伺服器。");
                             MessageBox.Show("錯誤：無法連接到伺服器。", "資訊有誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             break;
                         case 1049: // Unknown database
+                            UpdateLog("錯誤：該資料庫不存在或為空。");
                             MessageBox.Show("錯誤：該資料庫不存在或為空。", "資訊有誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             break;
                         case 1045: // Access denied for user (using password: YES)
+                            UpdateLog("錯誤：使用者名稱或密碼有誤，請再試一遍。");
                             MessageBox.Show("錯誤：使用者名稱或密碼有誤，請再試一遍。", "資訊有誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             break;
                         default:
+                            UpdateLog($"錯誤：未捕捉到的錯誤如下： {ex.Message}");
                             MessageBox.Show($"錯誤：未捕捉到的錯誤如下： {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             break;
                     }
@@ -156,10 +190,43 @@ namespace DB_GUI
             }
         }
 
-        private void UpdateLog()
+        private void DoNothing()
         {
-
+            ;
         }
+        private void UpdateLog(string message, string key = "Default")
+        {
+            string timestamp = "<" + DateTime.Now.ToString("HH:mm:ss") + "> ";
+            if (ResponseConsole.InvokeRequired)
+            {
+                ResponseConsole.Invoke(new Action(() => UpdateLogInternal(timestamp, message, key)));
+            }
+            else
+            {
+                UpdateLogInternal(timestamp, message, key);
+            }
+        }
+
+        private void UpdateLogInternal(string timestamp, string message, string key)
+        {
+            ResponseConsole.ReadOnly = false;
+
+            switch (key)
+            {
+                case "Default":
+                    ResponseConsole.AppendText(timestamp + "系統訊息: " + message + Environment.NewLine);
+                    break;
+                case "QueryLog":
+                    break;
+                default:
+                    ResponseConsole.AppendText(timestamp + "未知訊息: " + message + Environment.NewLine);
+                    break;
+            }
+
+            ResponseConsole.ReadOnly = true;
+            if(!isConnected) ResponseConsole.ScrollToCaret();
+        }
+
         private void Connection()
         {
             Disconnect.Enabled = true;
@@ -169,9 +236,7 @@ namespace DB_GUI
             DBTbox.Enabled = false;
             UserTbox.Enabled = false;
             PassTbox.Enabled = false;
-            CommandEntry.Enabled = true;
             Terminal.Enabled = true;
-            Submit.Enabled = true;
             NotConnected.Visible = false;
 
             if(canRecognize) ExampleRegion.Enabled = true;
@@ -196,7 +261,8 @@ namespace DB_GUI
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                UpdateLog($"資料庫連線錯誤: {ex.Message}");
+                MessageBox.Show($"資料庫連線錯誤: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -215,7 +281,6 @@ namespace DB_GUI
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                // Assuming your DataGridView is named `mainDataGridView`
                 MainGrid.DataSource = dt;
                 MainGrid.AutoResizeColumns();
             }
@@ -283,6 +348,20 @@ namespace DB_GUI
             }
         }
 
+        #endregion
+
+        #region Debug Methods
+        private void Debug_Click(object sender, EventArgs e)
+        {
+            if (!isConnected)
+            {
+                IPTbox.Text = "0.tcp.jp.ngrok.io";
+                PortTbox.Text = "11051";
+                DBTbox.Text = "411177034";
+                UserTbox.Text = "411177034";
+                PassTbox.Text = "411177034";
+            }
+        }
         #endregion
     }
 

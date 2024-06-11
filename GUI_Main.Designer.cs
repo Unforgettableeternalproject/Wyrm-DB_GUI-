@@ -67,10 +67,11 @@ namespace DB_GUI
             this.Bernie = new System.Windows.Forms.Button();
             this.Charlie = new System.Windows.Forms.Button();
             this.Title = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.Status = new System.Windows.Forms.Label();
             this.GeneralDescription = new System.Windows.Forms.ToolTip(this.components);
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.Debug = new System.Windows.Forms.Button();
             this.Datagrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainGrid)).BeginInit();
             this.Options.SuspendLayout();
@@ -319,7 +320,6 @@ namespace DB_GUI
             // 
             this.ResponseConsole.BackColor = System.Drawing.SystemColors.Control;
             this.ResponseConsole.Cursor = System.Windows.Forms.Cursors.No;
-            this.ResponseConsole.Enabled = false;
             this.ResponseConsole.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.ResponseConsole.Location = new System.Drawing.Point(1, 47);
             this.ResponseConsole.Name = "ResponseConsole";
@@ -454,6 +454,7 @@ namespace DB_GUI
             this.Title.AutoSize = true;
             this.Title.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Title.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Title.Controls.Add(this.Debug);
             this.Title.Controls.Add(this.label1);
             this.Title.Controls.Add(this.button1);
             this.Title.Controls.Add(this.Status);
@@ -462,16 +463,16 @@ namespace DB_GUI
             this.Title.Size = new System.Drawing.Size(845, 87);
             this.Title.TabIndex = 4;
             // 
-            // Status
+            // label1
             // 
-            this.Status.AutoSize = true;
-            this.Status.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Status.ForeColor = System.Drawing.Color.Maroon;
-            this.Status.Location = new System.Drawing.Point(719, 65);
-            this.Status.Name = "Status";
-            this.Status.Size = new System.Drawing.Size(122, 19);
-            this.Status.TabIndex = 0;
-            this.Status.Text = "連線狀態: 未連線";
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("UD Digi Kyokasho NP-B", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(80)))));
+            this.label1.Location = new System.Drawing.Point(285, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(375, 41);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Wyrm 資料庫檢索系統";
             // 
             // button1
             // 
@@ -487,16 +488,27 @@ namespace DB_GUI
             this.button1.TabIndex = 1;
             this.button1.UseVisualStyleBackColor = false;
             // 
-            // label1
+            // Status
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("UD Digi Kyokasho NP-B", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(80)))));
-            this.label1.Location = new System.Drawing.Point(285, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(375, 41);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Wyrm 資料庫檢索系統";
+            this.Status.AutoSize = true;
+            this.Status.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Status.ForeColor = System.Drawing.Color.Maroon;
+            this.Status.Location = new System.Drawing.Point(719, 65);
+            this.Status.Name = "Status";
+            this.Status.Size = new System.Drawing.Size(122, 19);
+            this.Status.TabIndex = 0;
+            this.Status.Text = "連線狀態: 未連線";
+            // 
+            // Debug
+            // 
+            this.Debug.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug.Location = new System.Drawing.Point(778, 8);
+            this.Debug.Name = "Debug";
+            this.Debug.Size = new System.Drawing.Size(62, 38);
+            this.Debug.TabIndex = 3;
+            this.Debug.Text = "測試";
+            this.Debug.UseVisualStyleBackColor = true;
+            this.Debug.Click += new System.EventHandler(this.Debug_Click);
             // 
             // GUI_Main
             // 
@@ -576,6 +588,7 @@ namespace DB_GUI
         private MenuStrip MenuBar;
         private Button button1;
         private Label label1;
+        private Button Debug;
     }
 }
 
