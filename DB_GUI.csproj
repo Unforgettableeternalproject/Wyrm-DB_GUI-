@@ -151,6 +151,9 @@
     <Content Include="Concept Arts\To Do.txt" />
     <Content Include="Concept Arts\User Manual.png" />
     <Content Include="Logo.ico" />
+    <Content Include="Resources\User_Interface_Snapshot.png" />
+    <Content Include="Resources\Snapshot_Disconnected.png" />
+    <None Include="README.zh-tw.md" />
     <None Include="Resources\Show.png" />
     <None Include="Resources\Hide.png" />
     <None Include="README.md" />

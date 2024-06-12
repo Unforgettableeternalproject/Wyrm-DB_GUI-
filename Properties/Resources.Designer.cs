@@ -123,6 +123,26 @@ namespace DB_GUI.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap Snapshot_Disconnected {
+            get {
+                object obj = ResourceManager.GetObject("Snapshot_Disconnected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap User_Interface_Snapshot {
+            get {
+                object obj = ResourceManager.GetObject("User_Interface_Snapshot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap User_Manual {
             get {
                 object obj = ResourceManager.GetObject("User Manual", resourceCulture);
