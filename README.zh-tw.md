@@ -1,4 +1,9 @@
-﻿# Wyrm GUI
+﻿### 此專案提供多種語言之README文件
+[![Static Badge](https://img.shields.io/badge/lang-en-red)](https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI-/blob/master/README.md) [![Static Badge](https://img.shields.io/badge/lang-zh--tw-yellow)](https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI-/blob/master/README.zh-tw.md)
+
+---
+
+# Wyrm GUI
 
 ## 概述
 Wyrm GUI 是一個用於查詢 MariaDB 資料庫的 Windows Form 應用程式。本應用程式的設計目的是為了方便使用者連接並查詢資料庫，提供簡單直觀的使用者介面，並可視化查詢結果。

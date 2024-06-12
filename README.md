@@ -1,5 +1,5 @@
-### This project provides multilanguage README.md file
-[![Static Badge](https://img.shields.io/badge/lang-en-red)](https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI-/blob/main/README.md) [![Static Badge](https://img.shields.io/badge/lang-zh--tw-yellow)](https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI-/blob/main/README.zh-tw.md)
+Ôªø### This project provides multilanguage README.md file
+[![Static Badge](https://img.shields.io/badge/lang-en-red)](https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI-/blob/master/README.md) [![Static Badge](https://img.shields.io/badge/lang-zh--tw-yellow)](https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI-/blob/master/README.zh-tw.md)
 
 ---
 
@@ -58,7 +58,7 @@ Wyrm GUI is a Windows Form application designed for querying MariaDB databases. 
 
 ## Contributors
 
-This project is developed in collaboration with [ßd≥√ÊJ](https://github.com/calculusfkyou).
+This project is developed in collaboration with [Âê≥ÂÇ¢ÊæÇ](https://github.com/calculusfkyou).
 
 Others are welcome to submit pull requests or open issues to provide suggestions or report errors!
 
