@@ -58,6 +58,19 @@ Wyrm GUI is a Windows Form application designed for querying MariaDB databases. 
 4. **Show User Manual**:
     - Click the "User Manual" button in the menu to open a subform containing all usage information.
 
+## Known Issues
+
+- The application is designed to work with a specific database schema. If the database schema is different, the application may not work as expected.
+- The example database is not open to current release yet.
+
+## To-Do
+
+- Add support for multiple languages.
+- Add support for different database schemas.
+- Add support for more complex SQL queries.
+- Add support for more database operations.
+- Make it so that everyone can include their example database.
+
 ## Contributors
 
 This project is developed in collaboration with [吳傢澂](https://github.com/calculusfkyou).
