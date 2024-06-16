@@ -1,24 +1,14 @@
 ﻿using DB_GUI.Properties;
 using MySql.Data.MySqlClient;
-using Mysqlx.Crud;
-using Org.BouncyCastle.Asn1.X509;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 // 範例資料庫的部份為了實施資訊安全因此不提供在Github原始碼內，請自行建立一個dbConfig.json檔案並填入以下內容：
 // {
@@ -505,6 +495,7 @@ namespace DB_GUI
             DBTbox.Enabled = false;
             UserTbox.Enabled = false;
             PassTbox.Enabled = false;
+            Toggle.Enabled = false;
             Terminal.Enabled = true;
             NotConnected.Visible = false;
 
@@ -530,6 +521,7 @@ namespace DB_GUI
             UserTbox.Enabled = true;
             PassTbox.Enabled = true;
             Connect.Enabled = true;
+            Toggle.Enabled = true;
             IPTbox.Clear();
             PortTbox.Clear();
             DBTbox.Clear();
