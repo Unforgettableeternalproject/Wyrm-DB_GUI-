@@ -16,8 +16,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+
+// 範例資料庫的部份為了實施資訊安全因此不提供在Github原始碼內，請自行建立一個dbConfig.json檔案並填入以下內容：
+// {
+//     "Server": "your_server_ip",
+//     "Port": "your_port",
+//     "Database": "your_database",
+//     "User": "your_username",
+//     "Password": "your_password"
+// }
 
 namespace DB_GUI
 {
@@ -335,6 +345,20 @@ namespace DB_GUI
         #endregion
 
         #region Helper Functions
+
+        private string ReadConnectionStringFromFile(string filePath)
+        {
+            try
+            {
+                return File.ReadAllText(filePath).Trim();
+            }
+            catch (Exception ex)
+            {
+                UpdateLog($"範例不存在，無法讀取資料庫配置文件: {ex.Message}");
+                MessageBox.Show($"範例不存在，無法讀取資料庫配置文件: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return string.Empty;
+            }
+        }
         private bool IsValidServerIP(string serverIP)
         {
             // Validate server IP format (this is a basic validation, can be improved)
@@ -549,7 +573,7 @@ namespace DB_GUI
             string connectionString = _connectionString;
             connection = new MySqlConnection(connectionString);
             isConnected = true;
-            if(connectionString == "Server=0.tcp.jp.ngrok.io;Port=11051;Database=411177034;User=411177034;Password=411177034;") canRecognize = true;
+            if(connectionString == ReadConnectionStringFromFile(@"..\..\Secrets\dbConfig.txt")) canRecognize = true;
 
             try
             {
@@ -627,12 +651,27 @@ namespace DB_GUI
         {
             if (!isConnected)
             {
-                IPTbox.Text = "0.tcp.jp.ngrok.io";
-                PortTbox.Text = "11051";
-                DBTbox.Text = "411177034";
-                UserTbox.Text = "411177034";
-                PassTbox.Text = "411177034";
-                  Connect.PerformClick();
+                string filePath = @"..\..\Secrets\dbConfig.json";
+                try
+                {
+                    string json = File.ReadAllText(filePath);
+                    DBConfig config = JsonConvert.DeserializeObject<DBConfig>(json);
+
+                    IPTbox.Text = config.Server;
+                    PortTbox.Text = config.Port;
+                    DBTbox.Text = config.Database;
+                    UserTbox.Text = config.User;
+                    PassTbox.Text = config.Password;
+                    Connect.PerformClick();
+                }
+                catch (Exception ex)
+                {
+                    UpdateLog($"無法讀取資料庫配置: {ex.Message}");
+                    MessageBox.Show($"無法讀取資料庫配置: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            } else
+            {
+                MessageBox.Show("你已連接到資料庫，無法使用範例資料庫。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         private void SystemReset_Click(object sender, EventArgs e)
@@ -703,6 +742,14 @@ namespace DB_GUI
             }
         }
         #endregion
+        class DBConfig
+        {
+            public string Server { get; set; }
+            public string Port { get; set; }
+            public string Database { get; set; }
+            public string User { get; set; }
+            public string Password { get; set; }
+        }
     }
 
     #region Other Infos
