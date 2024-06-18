@@ -747,7 +747,7 @@ namespace DB_GUI
     #region Other Infos
     //user_setting = {
     //    "user": "411177034",
-    //    "password": "411177034",
+    //    "password": "Not for you to see",
     //    "host": "0.tcp.jp.ngrok.io",
     //    "port": 11051,
     //    "database": "411177034"

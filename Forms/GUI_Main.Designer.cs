@@ -76,12 +76,12 @@ namespace DB_GUI
             this.Functions = new System.Windows.Forms.ToolStripMenuItem();
             this.ExampleDatebase = new System.Windows.Forms.ToolStripMenuItem();
             this.SystemReset = new System.Windows.Forms.ToolStripMenuItem();
-            this.Export = new System.Windows.Forms.ToolStripMenuItem();
-            this.UserManual = new System.Windows.Forms.ToolStripMenuItem();
-            this.GeneralDescription = new System.Windows.Forms.ToolTip(this.components);
             this.HistoryControl = new System.Windows.Forms.ToolStripMenuItem();
             this.ShowTable = new System.Windows.Forms.ToolStripMenuItem();
             this.Undo = new System.Windows.Forms.ToolStripMenuItem();
+            this.Export = new System.Windows.Forms.ToolStripMenuItem();
+            this.UserManual = new System.Windows.Forms.ToolStripMenuItem();
+            this.GeneralDescription = new System.Windows.Forms.ToolTip(this.components);
             this.Datagrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainGrid)).BeginInit();
             this.Options.SuspendLayout();
@@ -563,7 +563,7 @@ namespace DB_GUI
             this.ExampleDatebase.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.ExampleDatebase.ForeColor = System.Drawing.Color.Black;
             this.ExampleDatebase.Name = "ExampleDatebase";
-            this.ExampleDatebase.Size = new System.Drawing.Size(180, 22);
+            this.ExampleDatebase.Size = new System.Drawing.Size(158, 22);
             this.ExampleDatebase.Text = "連接範例資料庫";
             this.ExampleDatebase.Click += new System.EventHandler(this.ExampleDatabase_Click);
             // 
@@ -572,9 +572,35 @@ namespace DB_GUI
             this.SystemReset.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SystemReset.ForeColor = System.Drawing.Color.DarkRed;
             this.SystemReset.Name = "SystemReset";
-            this.SystemReset.Size = new System.Drawing.Size(180, 22);
+            this.SystemReset.Size = new System.Drawing.Size(158, 22);
             this.SystemReset.Text = "系統重置";
             this.SystemReset.Click += new System.EventHandler(this.SystemReset_Click);
+            // 
+            // HistoryControl
+            // 
+            this.HistoryControl.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ShowTable,
+            this.Undo});
+            this.HistoryControl.Name = "HistoryControl";
+            this.HistoryControl.Size = new System.Drawing.Size(67, 20);
+            this.HistoryControl.Text = "流程控制";
+            this.HistoryControl.ToolTipText = "進行流程控制";
+            // 
+            // ShowTable
+            // 
+            this.ShowTable.Name = "ShowTable";
+            this.ShowTable.Size = new System.Drawing.Size(158, 22);
+            this.ShowTable.Text = "列出資料表";
+            this.ShowTable.ToolTipText = "回到最一開始的查詢";
+            this.ShowTable.Click += new System.EventHandler(this.ShowTable_Click);
+            // 
+            // Undo
+            // 
+            this.Undo.Name = "Undo";
+            this.Undo.Size = new System.Drawing.Size(158, 22);
+            this.Undo.Text = "回到上一筆查詢";
+            this.Undo.ToolTipText = "回到已確認的上一筆查詢";
+            this.Undo.Click += new System.EventHandler(this.Undo_Click);
             // 
             // Export
             // 
@@ -591,32 +617,6 @@ namespace DB_GUI
             this.UserManual.Text = "使用說明";
             this.UserManual.ToolTipText = "開啟使用說明";
             this.UserManual.Click += new System.EventHandler(this.UserManual_Click);
-            // 
-            // HistoryControl
-            // 
-            this.HistoryControl.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ShowTable,
-            this.Undo});
-            this.HistoryControl.Name = "HistoryControl";
-            this.HistoryControl.Size = new System.Drawing.Size(67, 20);
-            this.HistoryControl.Text = "流程控制";
-            this.HistoryControl.ToolTipText = "進行流程控制";
-            // 
-            // ShowTable
-            // 
-            this.ShowTable.Name = "ShowTable";
-            this.ShowTable.Size = new System.Drawing.Size(180, 22);
-            this.ShowTable.Text = "列出資料表";
-            this.ShowTable.ToolTipText = "回到最一開始的查詢";
-            this.ShowTable.Click += new System.EventHandler(this.ShowTable_Click);
-            // 
-            // Undo
-            // 
-            this.Undo.Name = "Undo";
-            this.Undo.Size = new System.Drawing.Size(180, 22);
-            this.Undo.Text = "回到上一筆查詢";
-            this.Undo.ToolTipText = "回到已確認的上一筆查詢";
-            this.Undo.Click += new System.EventHandler(this.Undo_Click);
             // 
             // GUI_Main
             // 
