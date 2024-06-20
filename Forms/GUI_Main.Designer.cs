@@ -74,7 +74,7 @@ namespace DB_GUI
             this.MenuBar = new System.Windows.Forms.MenuStrip();
             this.DisplayMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.Functions = new System.Windows.Forms.ToolStripMenuItem();
-            this.ExampleDatebase = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExampleDatabase = new System.Windows.Forms.ToolStripMenuItem();
             this.SystemReset = new System.Windows.Forms.ToolStripMenuItem();
             this.HistoryControl = new System.Windows.Forms.ToolStripMenuItem();
             this.ShowTable = new System.Windows.Forms.ToolStripMenuItem();
@@ -550,7 +550,7 @@ namespace DB_GUI
             // Functions
             // 
             this.Functions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ExampleDatebase,
+            this.ExampleDatabase,
             this.SystemReset});
             this.Functions.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Functions.Name = "Functions";
@@ -558,21 +558,21 @@ namespace DB_GUI
             this.Functions.Text = "系統功能";
             this.Functions.ToolTipText = "展開系統功能";
             // 
-            // ExampleDatebase
+            // ExampleDatabase
             // 
-            this.ExampleDatebase.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.ExampleDatebase.ForeColor = System.Drawing.Color.Black;
-            this.ExampleDatebase.Name = "ExampleDatebase";
-            this.ExampleDatebase.Size = new System.Drawing.Size(158, 22);
-            this.ExampleDatebase.Text = "連接範例資料庫";
-            this.ExampleDatebase.Click += new System.EventHandler(this.ExampleDatabase_Click);
+            this.ExampleDatabase.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ExampleDatabase.ForeColor = System.Drawing.Color.Black;
+            this.ExampleDatabase.Name = "ExampleDatabase";
+            this.ExampleDatabase.Size = new System.Drawing.Size(180, 22);
+            this.ExampleDatabase.Text = "連接範例資料庫";
+            this.ExampleDatabase.Click += new System.EventHandler(this.ExampleDatabase_Click);
             // 
             // SystemReset
             // 
             this.SystemReset.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SystemReset.ForeColor = System.Drawing.Color.DarkRed;
             this.SystemReset.Name = "SystemReset";
-            this.SystemReset.Size = new System.Drawing.Size(158, 22);
+            this.SystemReset.Size = new System.Drawing.Size(180, 22);
             this.SystemReset.Text = "系統重置";
             this.SystemReset.Click += new System.EventHandler(this.SystemReset_Click);
             // 
@@ -589,7 +589,7 @@ namespace DB_GUI
             // ShowTable
             // 
             this.ShowTable.Name = "ShowTable";
-            this.ShowTable.Size = new System.Drawing.Size(158, 22);
+            this.ShowTable.Size = new System.Drawing.Size(180, 22);
             this.ShowTable.Text = "列出資料表";
             this.ShowTable.ToolTipText = "回到最一開始的查詢";
             this.ShowTable.Click += new System.EventHandler(this.ShowTable_Click);
@@ -597,7 +597,7 @@ namespace DB_GUI
             // Undo
             // 
             this.Undo.Name = "Undo";
-            this.Undo.Size = new System.Drawing.Size(158, 22);
+            this.Undo.Size = new System.Drawing.Size(180, 22);
             this.Undo.Text = "回到上一筆查詢";
             this.Undo.ToolTipText = "回到已確認的上一筆查詢";
             this.Undo.Click += new System.EventHandler(this.Undo_Click);
@@ -700,7 +700,7 @@ namespace DB_GUI
         private Label TitleDisplay;
         private MenuStrip MenuBar;
         private ToolStripMenuItem Functions;
-        private ToolStripMenuItem ExampleDatebase;
+        private ToolStripMenuItem ExampleDatabase;
         private ToolStripMenuItem SystemReset;
         private ToolStripMenuItem DisplayMenu;
         private ToolStripMenuItem Export;

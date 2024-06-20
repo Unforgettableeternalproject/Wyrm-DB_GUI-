@@ -145,6 +145,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="UserConfigs\exampleDbConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -156,7 +159,24 @@
     <Content Include="Logo.ico" />
     <Content Include="Resources\User_Interface_Snapshot.png" />
     <Content Include="Resources\Snapshot_Disconnected.png" />
-    <Content Include="Secrets\dbConfig.txt" />
+    <Content Include="UserConfigs\Example Database Usage.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UserConfigs\exampleQuery1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UserConfigs\exampleQuery2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UserConfigs\exampleQuery3.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UserConfigs\exampleQuery4.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UserConfigs\exampleQuery5.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="README.zh-tw.md" />
     <None Include="Resources\Show.png" />
     <None Include="Resources\Hide.png" />
@@ -164,6 +184,9 @@
     <None Include="Resources\Logo.png" />
     <None Include="Resources\Avatar_Be.png" />
     <None Include="Resources\Avatar_wu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Secrets\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
-// 範例資料庫的部份為了實施資訊安全因此不提供在Github原始碼內，請自行建立一個dbConfig.json檔案並填入以下內容：
+// 範例資料庫的部份為了實施資訊安全因此不提供在Github原始碼內，請於UserConfigs資料夾中尋找exampleDbConfig.json檔案並填入以下內容：
 // {
 //     "Server": "your_server_ip",
 //     "Port": "your_port",
@@ -29,6 +29,7 @@ namespace DB_GUI
         private StringBuilder currentQuery = new StringBuilder();
         private Queue<string> queryQueue = new Queue<string>();
         private Stack<string> history = new Stack<string>();
+        private List<string> exampleQueries = new List<string>();
 
         public GUI_Main()
         {
@@ -44,6 +45,7 @@ namespace DB_GUI
         {
             Reset_All();
             ResponseConsole.Clear();
+            ExampleDatabase.Enabled = LoadDatabaseConfig() == null ? false : true;
             UpdateLog("查詢程式啟動...");
         }
 
@@ -222,72 +224,27 @@ namespace DB_GUI
             switch (exampleID) 
             {
                 case 0:
-                    queryQueue.Enqueue(
-                        "SELECT VIN, c.customerName\n" +
-                        "FROM `customer's car`\n" +
-                        "NATURAL JOIN vehicles as v\n" +
-                        "NATURAL JOIN customers as c\n" +
-                        "WHERE modelName IN(\n" +
-                        "SELECT s.modelName\n" +
-                        "FROM suppliers as s\n" +
-                        "WHERE manufacturingDate BETWEEN '2014-01-01' AND '2017-12-31'\n" +
-                        "AND manufacturingPart = 'transmission'\n" +
-                        "AND supplierName = 'Getrag'\n" +
-                        ")");
+                    queryQueue.Enqueue(exampleQueries[0]);
                     UpdateLog("執行範例查詢一：持有來自Getrag供應商製造的缺陷零件組成的車的顧客。");
                     Submit.PerformClick();
                     break;
                 case 1:
-                    queryQueue.Enqueue(
-                        "SELECT dealerName\n" +
-                        "FROM(\n" +
-                        "SELECT dealerID, dealerName, SUM(saleFigure) AS sumSale\n" +
-                        "FROM salerecord AS s\n" +
-                        "NATURAL JOIN dealers\n" +
-                        "WHERE DATEDIFF(CURRENT_DATE, saleDate) < 365\n" +
-                        "GROUP BY dealerID, dealerName\n" +
-                        ") AS dIdNs\n" +
-                        "ORDER BY sumSale DESC\n" +
-                        "LIMIT 1; ");
+                    queryQueue.Enqueue(exampleQueries[1]);
                     UpdateLog("執行範例查詢二：過去一年裡擁有最高銷售額的經銷商。");
                     Submit.PerformClick();
                     break;
                 case 2:
-                    queryQueue.Enqueue(
-                        "SELECT brandName\n" +
-                        "FROM salerecord\n" +
-                        "NATURAL JOIN vehicles\n" +
-                        "NATURAL JOIN models\n" +
-                        "NATURAL JOIN brands\n" +
-                        "WHERE DATEDIFF(CURRENT_DATE, saleDate) < 365\n" +
-                        "GROUP BY brandName\n" +
-                        "ORDER BY COUNT(*) DESC\n" +
-                        "LIMIT 2; ");
+                    queryQueue.Enqueue(exampleQueries[2]);
                     UpdateLog("執行範例查詢三：過去一年裡具有最高銷售額的前兩個品牌。");
                     Submit.PerformClick();
                     break;
                 case 3:
-                    queryQueue.Enqueue(
-                        "SELECT MONTH(saleDate) as saleMonth\n" +
-                        "FROM salerecord\n" +
-                        "NATURAL JOIN vehicles\n" +
-                        "WHERE bodyStyle LIKE '%SUV%'\n" +
-                        "GROUP BY saleMonth\n" +
-                        "ORDER BY COUNT(*) DESC\n" +
-                        " LIMIT 1; "
-                        );
+                    queryQueue.Enqueue(exampleQueries[3]);
                     UpdateLog("執行範例查詢四：銷售最多SUV的月份。");
                     Submit.PerformClick();
                     break;
                 case 4:
-                    queryQueue.Enqueue(
-                        "SELECT dealerName\n" +
-                        "FROM inventory\n" +
-                        "NATURAL JOIN dealers\n" +
-                        "GROUP BY dealerName\n" +
-                        "ORDER BY AVG(DATEDIFF(CURRENT_DATE, inventoryTime)) DESC\n" +
-                        "LIMIT 1; "
-                        );
+                    queryQueue.Enqueue(exampleQueries[4]);
                     UpdateLog("執行範例查詢五：持有最久庫存的經銷商。");
                     Submit.PerformClick();
                     break;
@@ -335,20 +292,55 @@ namespace DB_GUI
         #endregion
 
         #region Helper Functions
-
-        private string ReadConnectionStringFromFile(string filePath)
+        private DBConfig LoadDatabaseConfig()
         {
+            string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UserConfigs", "exampleDbConfig.json");
             try
             {
-                return File.ReadAllText(filePath).Trim();
+                string json = File.ReadAllText(configPath);
+                DBConfig config = JsonConvert.DeserializeObject<DBConfig>(json);
+
+                if (config.Server == "your_server" || config.Port == "your_port" ||
+                    config.Database == "your_database" || config.User == "your_username" ||
+                    config.Password == "your_password")
+                {
+                    MessageBox.Show("若要使用範例資料庫功能，請修改UserConfigs/exampleDbConfig.json中的配置信息。", "配置未修改", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return null;
+                }
+
+                return config;
             }
             catch (Exception ex)
             {
-                UpdateLog($"範例不存在，無法讀取資料庫配置文件: {ex.Message}");
-                MessageBox.Show($"範例不存在，無法讀取資料庫配置文件: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return string.Empty;
+                UpdateLog($"無法讀取數據庫配置: {ex.Message}");
+                MessageBox.Show($"無法讀取數據庫配置: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
             }
         }
+
+        private void LoadExampleQueries()
+        {
+            string userConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UserConfigs");
+            for (int i = 1; i <= 5; i++) // 假設有5個示例查詢文件
+            {
+                string queryFilePath = Path.Combine(userConfigPath, $"exampleQuery{i}.txt");
+                if (File.Exists(queryFilePath) && !string.IsNullOrEmpty(File.ReadAllText(queryFilePath)))
+                {
+                    string query = File.ReadAllText(queryFilePath);
+                    exampleQueries.Add(query);
+                }
+                else
+                {
+                    UpdateLog($"一或多個示例查詢文件不存在，因此範例查詢功能已被停用。");
+                    MessageBox.Show($"範例查詢功能已停用!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    canRecognize = false;
+                    exampleQueries.Clear();
+                    return;
+                }
+            }
+            canRecognize = true;
+        }
+
         private bool IsValidServerIP(string serverIP)
         {
             // Validate server IP format (this is a basic validation, can be improved)
@@ -397,8 +389,7 @@ namespace DB_GUI
         {
             UpdateLog($"已送出查詢:\n{query}\n-----------------分隔線-----------------");
             MessageBox.Show("查詢已送出。");
-            // 此處為與資料庫連線並執行查詢的程式碼
-            UpdateDatagrid(query); // 假設 UpdateGrid 是用來更新 DataGridView 的方法
+            UpdateDatagrid(query);
         }
 
         private void DoNothing()
@@ -565,7 +556,6 @@ namespace DB_GUI
             string connectionString = _connectionString;
             connection = new MySqlConnection(connectionString);
             isConnected = true;
-            if(connectionString == ReadConnectionStringFromFile(@"..\..\Secrets\dbConfig.txt")) canRecognize = true;
 
             try
             {
@@ -643,11 +633,11 @@ namespace DB_GUI
         {
             if (!isConnected)
             {
-                string filePath = @"..\..\Secrets\dbConfig.json";
                 try
                 {
-                    string json = File.ReadAllText(filePath);
-                    DBConfig config = JsonConvert.DeserializeObject<DBConfig>(json);
+                    DBConfig config = LoadDatabaseConfig();
+                    LoadExampleQueries();
+                    if(config == null) return;
 
                     IPTbox.Text = config.Server;
                     PortTbox.Text = config.Port;
@@ -673,6 +663,8 @@ namespace DB_GUI
             {
                 Reset_All();
                 ResponseConsole.Clear();
+                exampleQueries.Clear();
+                ExampleDatabase.Enabled = LoadDatabaseConfig() == null ? false : true;
                 UpdateLog("查詢程式啟動...");
                 MessageBox.Show("已重置系統!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
