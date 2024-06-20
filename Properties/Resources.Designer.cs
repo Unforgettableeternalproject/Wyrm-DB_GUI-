@@ -145,7 +145,7 @@ namespace DB_GUI.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap User_Manual {
             get {
-                object obj = ResourceManager.GetObject("User Manual", resourceCulture);
+                object obj = ResourceManager.GetObject("User_Manual", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

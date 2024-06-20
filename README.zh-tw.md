@@ -6,9 +6,11 @@
 # Wyrm GUI
 
 ## 概述
+
 Wyrm GUI 是一個用於查詢 MariaDB 資料庫的 Windows Form 應用程式。本應用程式的設計目的是為了方便使用者連接並查詢資料庫，提供簡單直觀的使用者介面，並可視化查詢結果。
 
 ## 功能
+
 - **資料庫連接**：使用者可以輸入伺服器 IP、端口、資料庫名稱、使用者名稱和密碼來連接資料庫。
 - **範例資料庫使用**：使用者可以於UserConfigs資料夾中輸入對應資料，使系統可以支援範例資料庫的使用以及預設的查詢語句。
 - **查詢功能**：支持 SQL 查詢語句的輸入並顯示結果。
@@ -26,6 +28,7 @@ Wyrm GUI 是一個用於查詢 MariaDB 資料庫的 Windows Form 應用程式。
 ![截圖](Resources/User_Interface_Snapshot.png)
 
 ## 安裝方式
+
 1. **複製存放庫**：
     ```bash
     git clone https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI
@@ -39,6 +42,7 @@ Wyrm GUI 是一個用於查詢 MariaDB 資料庫的 Windows Form 應用程式。
     編譯並運行專案即可使用應用程式。
 
 ## 使用方式
+
 1. **連接資料庫**：
     - 在應用程式主介面中輸入伺服器 IP、端口、資料庫名稱、使用者名稱和密碼。
     - 點擊 "連接" 按鈕進行連接。
@@ -79,6 +83,7 @@ Wyrm GUI 是一個用於查詢 MariaDB 資料庫的 Windows Form 應用程式。
 也歡迎其他人加以提交 pull requests 或開啟 issues 提出建議或回報錯誤!
 
 ## 聯絡方式
+
 如有任何問題或建議，請聯絡我們的開發團隊 [![Static Badge](https://img.shields.io/badge/mail-Bernie-blue)
 ](mailto:ptyc4076@gmail.com), [![Static Badge](https://img.shields.io/badge/mail-Charlie-green)](mailto:charlie930320@gmail.com)。
 

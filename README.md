@@ -6,11 +6,13 @@
 # Wyrm GUI
 
 ## Overview
+
 Wyrm GUI is a Windows Form application designed for querying MariaDB databases. This application aims to provide users with a simple and intuitive interface to connect to and query databases, visualizing the query results.
 
 **The main application doesn't support full English language yet.**
 
 ## Features
+
 - **Database Connection**: Users can enter the server IP, port, database name, username, and password to connect to the database.
 - **Query Functionality**: Supports input of SQL queries and displays the results.
 - **Example Database Usage**: Users can enter corresponding data in the UserConfigs folder so that the system can support the use of sample databases and default query statements.
@@ -28,6 +30,7 @@ Wyrm GUI is a Windows Form application designed for querying MariaDB databases. 
 ![Screenshot](Resources/User_Interface_Snapshot.png)
 
 ## Installation
+
 1. **Clone the Repository**:
     ```bash
     git clone https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI
@@ -41,6 +44,7 @@ Wyrm GUI is a Windows Form application designed for querying MariaDB databases. 
     Build and run the project to use the application.
 
 ## Usage
+
 1. **Connect to the Database**:
     - Enter the server IP, port, database name, username, and password in the main interface.
     - Click the "Connect" button to establish a connection.
@@ -82,6 +86,7 @@ This project is developed in collaboration with [吳傢澂](https://github.com/c
 Others are welcome to submit pull requests or open issues to provide suggestions or report errors!
 
 ## Contact
+
 If you have any questions or suggestions, please contact our development team via [![Static Badge](https://img.shields.io/badge/mail-Bernie-blue)](mailto:ptyc4076@gmail.com), [![Static Badge](https://img.shields.io/badge/mail-Charlie-green)](mailto:charlie930320@gmail.com).
 
 ---

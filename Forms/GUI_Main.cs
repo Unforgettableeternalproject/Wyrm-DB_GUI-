@@ -45,7 +45,7 @@ namespace DB_GUI
         {
             Reset_All();
             ResponseConsole.Clear();
-            ExampleDatabase.Enabled = LoadDatabaseConfig() == null ? false : true;
+            ExampleDatabase.Enabled = LoadDatabaseConfig() != null;
             UpdateLog("查詢程式啟動...");
         }
 
@@ -664,7 +664,7 @@ namespace DB_GUI
                 Reset_All();
                 ResponseConsole.Clear();
                 exampleQueries.Clear();
-                ExampleDatabase.Enabled = LoadDatabaseConfig() == null ? false : true;
+                ExampleDatabase.Enabled = LoadDatabaseConfig() != null;
                 UpdateLog("查詢程式啟動...");
                 MessageBox.Show("已重置系統!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

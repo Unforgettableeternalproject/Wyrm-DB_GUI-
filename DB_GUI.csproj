@@ -130,6 +130,8 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Others\Release Notes\v.1.0.0.md" />
+    <None Include="Others\Release Notes\v.1.2.0.md" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -153,12 +155,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Concept Arts\DB_Frontend_Concept.png" />
-    <Content Include="Concept Arts\To Do.txt" />
-    <Content Include="Concept Arts\User Manual.png" />
+    <Content Include="Others\Concept Arts\DB_Frontend_Concept.png" />
+    <Content Include="Others\Concept Arts\To Do.txt" />
+    <Content Include="Others\Concept Arts\User Manual.png" />
     <Content Include="Logo.ico" />
-    <Content Include="Resources\User_Interface_Snapshot.png" />
     <Content Include="Resources\Snapshot_Disconnected.png" />
+    <Content Include="Resources\User_Interface_Snapshot.png" />
     <Content Include="UserConfigs\Example Database Usage.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -185,8 +187,6 @@
     <None Include="Resources\Avatar_Be.png" />
     <None Include="Resources\Avatar_wu.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Secrets\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

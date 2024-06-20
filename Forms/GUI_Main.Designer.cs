@@ -82,6 +82,7 @@ namespace DB_GUI
             this.Export = new System.Windows.Forms.ToolStripMenuItem();
             this.UserManual = new System.Windows.Forms.ToolStripMenuItem();
             this.GeneralDescription = new System.Windows.Forms.ToolTip(this.components);
+            this.Version = new System.Windows.Forms.Label();
             this.Datagrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainGrid)).BeginInit();
             this.Options.SuspendLayout();
@@ -480,6 +481,7 @@ namespace DB_GUI
             this.Title.AutoSize = true;
             this.Title.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Title.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Title.Controls.Add(this.Version);
             this.Title.Controls.Add(this.TitleDisplay);
             this.Title.Controls.Add(this.Logo);
             this.Title.Controls.Add(this.Status);
@@ -563,7 +565,7 @@ namespace DB_GUI
             this.ExampleDatabase.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.ExampleDatabase.ForeColor = System.Drawing.Color.Black;
             this.ExampleDatabase.Name = "ExampleDatabase";
-            this.ExampleDatabase.Size = new System.Drawing.Size(180, 22);
+            this.ExampleDatabase.Size = new System.Drawing.Size(158, 22);
             this.ExampleDatabase.Text = "連接範例資料庫";
             this.ExampleDatabase.Click += new System.EventHandler(this.ExampleDatabase_Click);
             // 
@@ -572,7 +574,7 @@ namespace DB_GUI
             this.SystemReset.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SystemReset.ForeColor = System.Drawing.Color.DarkRed;
             this.SystemReset.Name = "SystemReset";
-            this.SystemReset.Size = new System.Drawing.Size(180, 22);
+            this.SystemReset.Size = new System.Drawing.Size(158, 22);
             this.SystemReset.Text = "系統重置";
             this.SystemReset.Click += new System.EventHandler(this.SystemReset_Click);
             // 
@@ -589,7 +591,7 @@ namespace DB_GUI
             // ShowTable
             // 
             this.ShowTable.Name = "ShowTable";
-            this.ShowTable.Size = new System.Drawing.Size(180, 22);
+            this.ShowTable.Size = new System.Drawing.Size(158, 22);
             this.ShowTable.Text = "列出資料表";
             this.ShowTable.ToolTipText = "回到最一開始的查詢";
             this.ShowTable.Click += new System.EventHandler(this.ShowTable_Click);
@@ -597,7 +599,7 @@ namespace DB_GUI
             // Undo
             // 
             this.Undo.Name = "Undo";
-            this.Undo.Size = new System.Drawing.Size(180, 22);
+            this.Undo.Size = new System.Drawing.Size(158, 22);
             this.Undo.Text = "回到上一筆查詢";
             this.Undo.ToolTipText = "回到已確認的上一筆查詢";
             this.Undo.Click += new System.EventHandler(this.Undo_Click);
@@ -617,6 +619,17 @@ namespace DB_GUI
             this.UserManual.Text = "使用說明";
             this.UserManual.ToolTipText = "開啟使用說明";
             this.UserManual.Click += new System.EventHandler(this.UserManual_Click);
+            // 
+            // Version
+            // 
+            this.Version.AutoSize = true;
+            this.Version.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Version.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Version.Location = new System.Drawing.Point(3, 64);
+            this.Version.Name = "Version";
+            this.Version.Size = new System.Drawing.Size(142, 19);
+            this.Version.TabIndex = 4;
+            this.Version.Text = "應用程式版本: 1.2.0";
             // 
             // GUI_Main
             // 
@@ -709,6 +722,7 @@ namespace DB_GUI
         private ToolStripMenuItem HistoryControl;
         private ToolStripMenuItem ShowTable;
         private ToolStripMenuItem Undo;
+        private Label Version;
     }
 }
 
