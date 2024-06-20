@@ -65,7 +65,7 @@ Wyrm GUI is a Windows Form application designed for querying MariaDB databases. 
 
 ## Updates to the sample database
 
-- We've updated how the example database works. Users are now required to provide their own repository credentials and sample queries to better customize and test the application. Please refer to [Example Database Usage Instructions](Example%20Database%20Usage.txt) for more details.
+- We've updated how the example database works. Users are now required to provide their own repository credentials and sample queries to better customize and test the application. Please refer to [Example Database Usage Instructions](https://github.com/Unforgettableeternalproject/Wyrm-DB_GUI-/blob/master/UserConfigs/Example%20Database%20Usage.txt) for more details.
 
 ## Known Issues
 
